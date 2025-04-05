@@ -1,25 +1,46 @@
-use std::collections::hash_map;
 use std::collections::HashMap;
 use std::env;
-use std::collections;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let task = &args[1].clone();
-    let parameters = &args[2..];
-
-    match task.as_str() {
-        "new" => {
-            println!("creating new collection...");
-        }
-        _ => {
-            println!("doing nothing...");
-        }
+    if args.len() > 1 {
+        let task = &args[1].clone();
+        let parameters = &args[2..];
+        dbg!(&task);
+        dbg!(&parameters);
     }
 
-    dbg!(&task);
-    dbg!(&parameters);
+    loop {
+
+        let mut input = String::new();
+        std::io::stdin()
+            .read_line(&mut input)
+            .expect("Failed to read line");
+
+        match input.as_str() {
+            "list" => {
+                println!("Listing collection...");
+            }
+            "add" => {
+                println!("Adding stickers to collection...");
+            }
+            "remove" => {
+                println!("Removing stickers from collection...");
+            }
+            "trade" => {
+                println!("Doing some trading...");
+            }
+            "exit" => {
+                println!("Exiting...");
+                break;
+            }
+            _ => {
+                println!("Doing something else...");
+            }
+        }
+
+    }
 }
 
 pub struct Collection {
