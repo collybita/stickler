@@ -1,58 +1,45 @@
-use std::collections::HashMap;
-use std::env;
+use std::io;
 
-fn main() {
-    let args: Vec<String> = env::args().collect();
+use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind};
+use ratatui::{
+    buffer::Buffer,
+    layout::Rect,
+    style::Stylize,
+    symbols::border,
+    text::{Line, Text},
+    widgets::{Block, Paragraph, Widget},
+    DefaultTerminal, Frame,
+};
 
-    if args.len() > 1 {
-        let task = &args[1].clone();
-        let parameters = &args[2..];
-        dbg!(&task);
-        dbg!(&parameters);
-    }
+fn main() -> io::Result<()> {
+    let mut terminal = ratatui::init();
+    let app_result = App::default().run(&mut terminal);
+    ratatui::restore();
+    app_result
+}
 
-    loop {
+#[derive(Debug, Default)]
+pub struct App {
+    counter: u8,
+    exit: bool,
+}
 
-        let mut input = String::new();
-        std::io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read line");
+impl App {
 
-        match input.as_str() {
-            "list" => {
-                println!("Listing collection...");
-            }
-            "add" => {
-                println!("Adding stickers to collection...");
-            }
-            "remove" => {
-                println!("Removing stickers from collection...");
-            }
-            "trade" => {
-                println!("Doing some trading...");
-            }
-            "exit" => {
-                println!("Exiting...");
-                break;
-            }
-            _ => {
-                println!("Doing something else...");
-            }
+    /// runs the application's main loop until the user quits
+    pub fn run(&mut self, terminal: &mut DefaultTerminal) -> io::Result<()> {
+        while !self.exit {
+            terminal.draw(|frame| self.draw(frame))?;
+            self.handle_events()?;
         }
-
+        Ok(())
     }
-}
 
-pub struct Collection {
-    pub name: String,
-    pub stickers: HashMap<i32, i32>, 
-}
+    fn draw(&self, frame: &mut Frame) {
+        todo!()
+    }
 
-impl Collection {
-    pub fn new(&mut self, name: String) -> &Collection {
-        self.name = name;
-
-        self.stickers = HashMap::new();
-        return self;
+    fn handle_events(&mut self) -> io::Result<()> {
+        todo!()
     }
 }
