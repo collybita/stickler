@@ -1,15 +1,21 @@
-use app::App;
-use ui::ui;
-use ratatui::crossterm::event::{self, DisableMouseCapture, EnableMouseCapture, Event};
-use ratatui::crossterm::execute;
-use ratatui::crossterm::terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen};
-use ratatui::prelude::{Backend, CrosstermBackend};
-use ratatui::Terminal;
-use std::error::Error;
-use std::io;
+use std::{error::Error, io};
+
+use ratatui::{
+    backend::{Backend, CrosstermBackend},
+    crossterm::{
+        event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEventKind},
+        execute,
+        terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+    },
+    Terminal,
+};
 
 mod app;
 mod ui;
+use crate::{
+    app::{App, CurrentScreen},
+    ui::ui,
+};
 
 fn main() -> Result<(), Box<dyn Error>> {
     enable_raw_mode()?;
@@ -41,6 +47,33 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
                 // Skip events that are not KeyEventKind::Press
                 continue;
             }
-        }
+            match app.current_screen {
+                CurrentScreen::Main => match key.code {
+                    KeyCode::Char('l') => {
+                        app.current_screen = CurrentScreen::Listing;
+                    }
+                    KeyCode::Char('a') => {
+                        app.current_screen = CurrentScreen::Adding;
+                    }
+                    KeyCode::Char('r') => {
+                        app.current_screen = CurrentScreen::Removing;    
+                    }
+                    KeyCode::Char('t') => {
+                        app.current_screen = CurrentScreen::Trading;    
+                    }
+                    KeyCode::Char('q') => {
+                        app.current_screen = CurrentScreen::Exiting;
+                    }
+                    _ => {}
+                },
+                CurrentScreen::Adding => {},
+                CurrentScreen::Removing => {},
+                CurrentScreen::Listing => {},
+                CurrentScreen::Exiting => {},
+                CurrentScreen::Trading => {},
+                CurrentScreen::TradeHandling => {},
+                _ => {}
+            }
+        }   
     }
 }
