@@ -2,7 +2,7 @@ use app::App;
 use ratatui::crossterm::event::{DisableMouseCapture, EnableMouseCapture};
 use ratatui::crossterm::execute;
 use ratatui::crossterm::terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen};
-use ratatui::prelude::CrosstermBackend;
+use ratatui::prelude::{Backend, CrosstermBackend};
 use ratatui::Terminal;
 use std::error::Error;
 use std::io;
@@ -28,4 +28,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     terminal.show_cursor()?;
 
     Ok(())
+}
+
+fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<bool> {
+    todo!();
 }
